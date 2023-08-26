@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,16 +13,16 @@
 	<!-- Google Font Family Link End -->
 
 	<!-- CSS -->
-	<link href="assets/css/iconmoon.css" rel="stylesheet">
-	<link href="assets/css/style.css" rel="stylesheet">
-	<link href="assets/css/cs-foodbakery-plugin.css" rel="stylesheet">
+	<link href="{% static 'css/iconmoon.css'%}" rel="stylesheet">
+	<link href="{% static 'css/style.css'%}" rel="stylesheet">
+	<link href="{% static 'css/cs-foodbakery-plugin.css'%}" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link href="assets/css/bootstrap-slider.css" rel="stylesheet">
+	<link href="{% static 'css/bootstrap-slider.css'%}" rel="stylesheet">
 	
 	<!-- JAVASCRIPT -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="assets/js/modernizr.js"></script>
-	<script src="assets/js/bootstrap.js"></script>
+	<script src="{% static 'js/modernizr.js'%}"></script>
+	<script src="{% static 'bootstrap.js'%}"></script>
 
 	<style>
 		body, .main-section p, .mce-content-body p{
@@ -42,7 +43,7 @@
 							<div class="logo">
 								<figure>
 									<a href="index.html" class="light-logo">
-										<img src="assets/extra-images/main-logo.png" alt="FoodBakery">
+										<img src="{%static 'logo/foodOnlineLogo.png'%}" alt="FoodOnline" width ="240">
 									</a>
 								</figure>
 							</div>
@@ -394,7 +395,7 @@
 	</div>
 	
 	<!-- Modal Popup End -->
-	<script src="assets/js/scripts.js"></script>
-	<script src="assets/js/functions.js"></script>
+	<script src="{% static 'js/scripts.js'%}"></script>
+	<script src="{% static 'js/functions.js'%}"></script>
 </body>
 </html>
