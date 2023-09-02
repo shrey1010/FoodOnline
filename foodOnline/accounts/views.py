@@ -4,9 +4,13 @@ from .forms import UserForm
 from .models import User,UserProfile
 from django.contrib import messages,auth
 from vendor.forms import VendorForm
-from .utils import detectUser
+from .utils import detectUser,send_verfication_email
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import PermissionDenied
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+
 
 # Create your views here.
 
@@ -38,7 +42,10 @@ def registerUser(request):
             user = User.objects.create_user(first_name=first_name, last_name=last_name,username=username, email=email, password=password)
             user.role = User.CUSTOMER
             user.save()
+            #send email to user to confirmation
+            send_verfication_email(request,user)
             messages.success(request, 'Your account has registered successfully!')
+            messages.success(request, 'Verification mail has been sent to your email address. Please wait for the confirmation')
             return redirect('myAccount')
         else :
             print("Invalid Form")
@@ -71,6 +78,8 @@ def registerVendor(request):
             user_profile = UserProfile.objects.get(user = user)
             vendor.user_profile = user_profile
             vendor.save()
+            #send email to user to confirmation
+            send_verfication_email(request,user)
             messages.success(request, 'Your Restaurant has registered successfully! Please wait for application confirmation .')
             return redirect('myAccount')
         else :
@@ -125,5 +134,22 @@ def custDashboard(request):
 @user_passes_test(check_role_vendor)
 def vendorDashboard(request):
     return render(request,'accounts/vendorDashboard.html') 
+
+
+
+def activate(request,uidb64,token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User._default_manager.get(pk=uid)
+    except(TypeError,ValueError,OverflowError,User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user,token):
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Your account has been activated successfully!')
+        return redirect('myAccount')
+    else:
+        messages.error(request, 'Invalid activation link')
+        return redirect('myAccount')
 
 
