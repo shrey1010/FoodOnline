@@ -1,0 +1,13 @@
+{% autoescape off %}
+
+HI {{user.first_name}} {{user.last_name}},
+
+{% if is_approved %}
+    Congratulations!Your account has been approved by our team 
+{% else %}
+    We are sorry! your license has been rejected by our team you are not eligible to be publish foods
+Please click the link below to activate your account! please contact support@foodOnline.com
+
+{% endif %}
+     
+{% endautoescape %}
