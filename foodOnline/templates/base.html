@@ -19,11 +19,16 @@
 	<link href="{% static 'css/cs-foodbakery-plugin.css'%}" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link href="{% static 'css/bootstrap-slider.css'%}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<!-- JAVASCRIPT -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="{% static 'js/modernizr.js'%}"></script>
 	<script src="{% static 'bootstrap.js'%}"></script>
+
+
+	{% comment %} simply find google key in https://console.cloud.google.com/ and paste api key and uncomment this to enable google geo coding 
+	refrence : https://www.udemy.com/course/python-django-real-world-project-multi-vendor-restaurant/learn/lecture/33180178#overview {% endcomment %}
 
 	{% comment %} google autocomplete {% endcomment %}
 	{% comment %} <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script>

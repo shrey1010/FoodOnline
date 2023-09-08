@@ -9,6 +9,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test,login_required
 from accounts.views import check_role_vendor
+from menu.models import Category,FoodItem
 
 
 # Create your views here.
@@ -42,3 +43,27 @@ def vprofile(request):
         "vendor": vendor
     }
     return render(request, 'vendor/vprofile.html', context=context)
+
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def menuBuilder(request):
+    vendor = Vendor.objects.get(user=request.user)
+    categories = Category.objects.filter(vendor=vendor)
+    context = {
+        'categories': categories,
+    }
+    return render(request,'vendor/menuBuilder.html',context=context)
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def fooditems_by_category(request,pk=None):
+    vendor = Vendor.objects.get(user=request.user)
+    category = get_object_or_404(Category,pk=pk)
+    
+    fooditems = FoodItem.objects.filter(vendor=vendor,category=category)
+    context = {
+        'fooditems': fooditems,
+        'category': category,
+    }
+    return render(request,'vendor/fooditems_by_category.html',context=context)
