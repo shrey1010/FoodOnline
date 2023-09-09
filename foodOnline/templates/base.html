@@ -27,12 +27,12 @@
 	<script src="{% static 'bootstrap.js'%}"></script>
 
 
-	{% comment %} simply find google key in https://console.cloud.google.com/ and paste api key and uncomment this to enable google geo coding 
-	refrence : https://www.udemy.com/course/python-django-real-world-project-multi-vendor-restaurant/learn/lecture/33180178#overview {% endcomment %}
+	<!-- {% comment %} simply find google key in https://console.cloud.google.com/ and paste api key and uncomment this to enable google geo coding 
+	refrence : https://www.udemy.com/course/python-django-real-world-project-multi-vendor-restaurant/learn/lecture/33180178#overview {% endcomment %} -->
 
-	{% comment %} google autocomplete {% endcomment %}
-	{% comment %} <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script>
-	<script src="{% static 'js/custom.js'%}"></script> {% endcomment %}
+	<!-- {% comment %} google autocomplete {% endcomment %} -->
+	<!-- {% comment %} <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script>
+	<script src="{% static 'js/custom.js'%}"></script> {% endcomment %} -->
 
 	<style>
 		body, .main-section p, .mce-content-body p{
@@ -43,12 +43,12 @@
 
 <body>
 
-    {% comment %} load nav bar  {% endcomment %}
+    <!-- {% comment %} load nav bar  {% endcomment %} -->
 	{% include "includes/navbar.html" %}
-    {% comment %} load content here  {% endcomment %}
+    <!-- {% comment %} load content here  {% endcomment %} -->
 	{% block content %}
 	{% endblock %}
-    {% comment %} laod footer here  {% endcomment %}
+    <!-- {% comment %} laod footer here  {% endcomment %} -->
 	{% include "includes/footer.html" %}
 	<!--Main Wrapper-->
 	
