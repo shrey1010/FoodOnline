@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% include 'includes/alerts.html' %}
 {% block content %}
 
 <!-- Main Section Start -->
@@ -22,7 +23,7 @@
 									</div>
 									<div class="listing simple">
 										<ul>
-                                            {% for vendor in vendor %}
+                                            {% for vendor in vendors %}
 											<li style="line-height: 15px;">
 												<div class="img-holder">
 													<figure>
@@ -40,17 +41,18 @@
 													
 													<div class="post-title">
 														<h5>
-															<a href="listing-detail.html">{{vendor.vendor_name}}</a>
+															<a href="{% url 'vendor_detail' vendor.vendor_slug %}">{{vendor.vendor_name}}</a>
 															
 														</h5>
 													</div>
                                                     {% if vendor.user_profile.address %}
+													<i class="icon-location"></i>
 													<span><small class="text-muted">{{vendor.user_profile.address}}</small></span>
 													{% endif %}
 												</div>
 												<div class="list-option">
 
-													<a href="#" class="viewmenu-btn text-color">View Menu</a>
+													<a href="{% url 'vendor_detail' vendor.vendor_slug %}" class="viewmenu-btn text-color">View Menu</a>
 												</div>
 											</li>
 											{% endfor %}
