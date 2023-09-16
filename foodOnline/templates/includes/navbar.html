@@ -33,8 +33,9 @@
 								{% if user.is_authenticated %}
 								<a href="">
 									<i class="fa fa shopping-cart text-danger" style="font-size: 20px;"></i>
-									<span class="badge badge-warning" id="cart-counter" style="border-radius: 50px; position: relative; bottom: 10px; left: -5px;">{{cart_count}}</span>
+									<span class="badge badge-warning" id="cart_counter" style="border-radius: 50px; position: relative; bottom: 10px; left: -5px;">{{cart_count}}</span>
 								</a>
+
 								{% endif %}
 								<a class="btn btn-outline-danger text-uppercase font-weight-bold" href="{% url 'marketplace' %}">Marketplace </a>
 								{% if user.is_authenticated %}
