@@ -22,7 +22,9 @@
 									<div class="tab-content">
 										<div id="home" class="tab-pane in active">
 											<div class="menu-itam-holder">
-												
+												<div class="text-center p-5" id="empty-cart" style="display: none;">
+                                                    <h3>Cart is Empty!</h3>
+                                                </div>
 												<div id="menu-item-list-6272" class="menu-itam-list">
 													
 													
@@ -39,7 +41,7 @@
                                                                 </div>
                                                                 <div class="price-holder">
                                                                     <span class="price">${{item.fooditem.price}}</span>
-                                                                    <a href="#" class="decrease_cart" style="margin-right: 28px;" data-id="{{item.fooditem.id}}" data-url="{% url 'decrease_cart' item.fooditem.id %}""><i class="icon-minus text-color"></i></a>
+                                                                    <a href="#" class="decrease_cart" style="margin-right: 28px;" data-id="{{item.fooditem.id}}" id="{{item.id}}" data-url="{% url 'decrease_cart' item.fooditem.id %}""><i class="icon-minus text-color"></i></a>
                                                                     <label id="qty-{{item.fooditem.id}}">0</label>
                                                                     <a href="#" class="add_to_cart" data-id="{{item.fooditem.id}}" data-url="{% url 'add_to_cart' item.fooditem.id %}"><i class="icon-plus4 text-color"></i></a>
 

@@ -116,7 +116,8 @@ $(document).ready(function(){
         e.preventDefault();
         food_id = $(this).attr('data-id');
         url = $(this).attr('data-url');
-        
+        cart_id = $(this).attr('id');
+
         $.ajax({
             type:'GET',
             url:url,
@@ -134,6 +135,10 @@ $(document).ready(function(){
                 else{
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     $('#qty-'+food_id).html(response.qty);
+                    if(window.location.pathname=='/cart/'){
+                    removeCartItem(response.qty,cart_id);
+                    checkEmptyCart();
+                    }
                 }
                 
             }
@@ -161,7 +166,8 @@ $('.delete_cart').on('click',function(e){
                 else{
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     swal(response.status,response.message,'success')
-                    removeCartItem(0,cart_id)
+                    removeCartItem(0,cart_id);
+                    checkEmptyCart();
                 }
                 
             }
@@ -172,8 +178,16 @@ $('.delete_cart').on('click',function(e){
 
     // delete cart item card
     function removeCartItem(cartItemQty,cart_id){
-        if(cartItemQty <=0){
-            document.getElementById('cart-item-'+cart_id).remove()
+        if(window.location.pathname=='/cart/'){
+            if(cartItemQty <=0){
+                document.getElementById('cart-item-'+cart_id).remove()
+            }
+        }
+    }
+    function checkEmptyCart(){
+        var cart_counter = document.getElementById('cart_counter').innerHTML;
+        if (cart_counter == 0){
+            document.getElementById('empty-cart').style.display = 'block';
         }
     }
 
