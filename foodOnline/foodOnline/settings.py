@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "django.contrib.gis",
     "accounts",
     "vendor",
     "menu",
@@ -161,3 +162,10 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 # Google api configuration
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+
+
+import os 
+# for spatial data
+# os.environ['PATH'] = os.path.join(BASE_DIR, 'envLibsite-packagesosgeo') + ';' + os.environ['PATH']
+# os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'envLibsite-packagesosgeodataproj') + ';' + os.environ['PATH']
+# GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'envLibsite-packagesosgeogdal304.dll')
