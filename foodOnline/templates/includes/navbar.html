@@ -20,8 +20,8 @@
 								<ul>
 									<li class="location-has-children choose-location">
 										<form action="#">
-											<input type="text" value="" name="location" placeholder="Enter your delivery location" autocomplete="off">
-											<span id="foodbakery_radius_location_open" class="foodbakery-radius-location"><i class="icon-target5"></i></span>
+											<input type="text" value="" name="location" id="location"  placeholder="Your Current Location" autocomplete="off">
+											<span id="foodbakery_radius_location_open" class="foodbakery-radius-location" onclick="getLocation()"><i class="icon-target5"></i></span>
 										</form>
 										
 									</li>
@@ -55,3 +55,36 @@
 				</div>
 			</div>
 		</header>
+
+
+<script>
+	var x = document.getElementById("location");
+
+	function getLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition);
+	} else { 
+		x.innerHTML = "Geolocation is not supported by this browser.";
+	}
+	}
+
+	function showPosition(position) {
+		var lat = position.coords.latitude;
+		var lng = position.coords.longitude;
+		
+		// hit ajax request to googlemaps  api endpoint  and get location data 
+		var GOOGLE_API_KEY = "{{GOOGLE_API_KEY}}"
+		var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"+&key"+GOOGLE_API_KEY
+
+		$.ajax({
+			url:url,
+			type: "GET",
+			success: function(response) {
+				var currlocation = response.results[0].formatted_address;
+				x.value = currlocation
+			}
+		})
+
+	
+	}
+</script>
