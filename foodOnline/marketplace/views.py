@@ -7,6 +7,7 @@ from django.http import HttpResponse,JsonResponse
 from .models import Cart
 from .context_processors import get_cart_counter,get_cart_ammount
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 
@@ -136,7 +137,11 @@ def search(request):
         radius= request.GET.get('radius')
         keyword = request.GET.get('keyword')
 
-        vendors = Vendor.objects.filter(vendor_name__icontains=keyword,is_approved=True,user__is_active=True)
+        #get vendor id  that has searched food items 
+        fetch_vendors_by_fooditems = FoodItem.objects.filter(food_title__icontains=keyword,is_available=True).values_list('vendor_id',flat=True)
+
+        vendors = Vendor.objects.filter(Q(id__in=fetch_vendors_by_fooditems)| Q(vendor_name__icontains=keyword,is_approved=True,user__is_active=True))
+        
         vendor_count = vendors.count()
 
         context ={
