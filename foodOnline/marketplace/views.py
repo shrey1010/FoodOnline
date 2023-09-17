@@ -127,4 +127,26 @@ def delete_cart(request,cart_id=None):
         return JsonResponse({'status':'login_required','message':'Please login to continue'})
     
 
+
+def search(request):
+    if request.method == 'GET':
+        address= request.GET.get('address')
+        latitude= request.GET.get('lat')
+        longitude= request.GET.get('lng')
+        radius= request.GET.get('radius')
+        keyword = request.GET.get('keyword')
+
+        vendors = Vendor.objects.filter(vendor_name__icontains=keyword,is_approved=True,user__is_active=True)
+        vendor_count = vendors.count()
+
+        context ={
+            'vendors': vendors,
+            'vendor_count': vendor_count,
+        }
+
+        return render(request, 'marketplace/listings.html',context=context)
+    else:
+        return HttpResponse('404 - Not Found')
+    
+
  

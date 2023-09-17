@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from. import views
-from marketplace.views import cart
+from marketplace.views import cart,search
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -27,5 +27,6 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("", include("accounts.urls")),
     path('cart/',cart,name = 'cart'),
+    path('search/',search,name = 'search'),
     path("", include("marketplace.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

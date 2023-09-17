@@ -27,13 +27,13 @@
 	<script src="{% static 'bootstrap.js'%}"></script>
 
 
-	<!-- {% comment %} simply find google key in https://console.cloud.google.com/ and paste api key and uncomment this to enable google geo coding 
+	<!-- {% comment %} simply find google key in https://console.cloud.google.com/ 
 	refrence : https://www.udemy.com/course/python-django-real-world-project-multi-vendor-restaurant/learn/lecture/33180178#overview {% endcomment %} -->
 
 	<!-- {% comment %} google autocomplete {% endcomment %} -->
-	{% if '/profile/' in request.GET %}
-	<!-- {% comment %} <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script> {% endcomment %} -->
-	{% endif %}
+	
+	 <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script> 
+	
 	<script src="{% static 'js/custom.js'%}"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
