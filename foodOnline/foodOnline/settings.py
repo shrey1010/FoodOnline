@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "django.contrib.gis",
+    "django.contrib.gis",
     "accounts",
     "vendor",
     "menu",
@@ -165,7 +165,23 @@ GOOGLE_API_KEY = config('GOOGLE_API_KEY')
 
 
 import os 
-# for spatial data
+# for spatial data with virtual environment 
 # os.environ['PATH'] = os.path.join(BASE_DIR, 'envLibsite-packagesosgeo') + ';' + os.environ['PATH']
 # os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'envLibsite-packagesosgeodataproj') + ';' + os.environ['PATH']
-# GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'envLibsite-packagesosgeogdal304.dll')
+# GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'envLibsite-packagesosgeogdal304.dll') 
+
+
+# for spatial data without virtual environment 
+DIR = r'C:\Users\shrey\AppData\Local\Programs\Python\Python311'
+
+# Update PATH
+os.environ['PATH'] = os.path.join(DIR, 'Lib', 'site-packages', 'osgeo') + ';' + os.environ['PATH']
+
+# Update PROJ_LIB
+os.environ['PROJ_LIB'] = os.path.join(DIR, 'Lib', 'site-packages', 'osgeodataproj') + ';' + os.environ.get('PROJ_LIB', '')
+
+# Set GDAL_LIBRARY_PATH
+GDAL_LIBRARY_PATH = os.path.join(DIR, 'Lib', 'site-packages', 'osgeo', 'gdal304.dll') 
+
+# Now, you can use GDAL_LIBRARY_PATH wherever you need it in your code.
+
