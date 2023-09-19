@@ -13,6 +13,7 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from accounts.models import UserProfile
+from django.contrib.gis.geos import Point
 
 # Create your views here.
 
@@ -151,7 +152,7 @@ def search(request):
 
             if latitude is not None and longitude is not None and radius is not None:
                 pnt = GEOSGeometry('POINT(%s %s)' % (longitude, latitude))
-                vendors = Vendor.objects.filter(Q(id__in=fetch_vendors_by_fooditems)| Q(vendor_name__icontains=keyword,is_approved=True,user__is_active=True),user_profile__location__distance_lte(pnt,D(km=radius))).annotate(distance=Distance("user_profile__location",pnt)).order_by('distance')
+                vendors = Vendor.objects.filter(Q(id__in=fetch_vendors_by_fooditems)| Q(vendor_name__icontains=keyword,is_approved=True,user__is_active=True),user_profile__location__distance_lte=(pnt,D(km=radius))).annotate(distance=Distance("user_profile__location",pnt)).order_by('distance')
 
             for v in vendors:
                 v.kms = round(v.distance.km,2)
