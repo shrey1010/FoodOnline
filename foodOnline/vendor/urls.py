@@ -20,5 +20,5 @@ urlpatterns = [
 
     #openinghour 
     path('opening-hours/',opening_hours,name='openinghours'),
-    path('opening-hours/add/',add_opening_hours,name='add_openinghours'),
+    path('opening-hours/add/',add_opening_hours,name='add_opening_hours'),
 ]

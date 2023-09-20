@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .forms import VendorForm,OpeningHoursForm
+from .forms import VendorForm,OpeningHourForm
 from accounts.forms import UserProfileForm
 from django.shortcuts import get_object_or_404
 from accounts.models import UserProfile
-from .models import Vendor,OpeningHours
+from .models import Vendor,OpeningHour
 from django.contrib import messages 
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
@@ -195,17 +195,17 @@ def delete_Food(request,pk=None):
     return redirect('fooditems_by_category',food.category.id)
 
 
-@login_required(login_url='login')
-@user_passes_test(check_role_vendor)
 def opening_hours(request):
     vendor = Vendor.objects.get(user=request.user)
-    opening_hours = OpeningHours.objects.filter(vendor=vendor)
-    form = OpeningHoursForm()
+    opening_hours = OpeningHour.objects.filter(vendor=vendor)
+    
+    form = OpeningHourForm()
     context = {
-        'opening_hours': opening_hours,
         'form': form,
+        'opening_hours': opening_hours,
     }
-    return render(request,'vendor/opening_hours.html',context=context) 
+    return render(request, 'vendor/opening_hours.html', context=context)
+
 
 
 def add_opening_hours(request):
@@ -218,29 +218,30 @@ def add_opening_hours(request):
                 is_closed = request.POST.get('is_closed')
                 try:
                     vendor = Vendor.objects.get(user=request.user)
-                    hour = OpeningHours.objects.create(vendor =vendor,day=day,from_hour=from_hour,to_hour=to_hour,is_closed=is_closed)
+                    hour = OpeningHour.objects.create(vendor=vendor, day=day, from_hour=from_hour, to_hour=to_hour, is_closed=is_closed)
                     if hour:
-                        day = OpeningHours.objects.get(id=hour.id)
+                        day = OpeningHour.objects.get(id=hour.id)
                         if day.is_closed:
-                            response={
+                            response = {
                                 'status': 'success',
                                 'id': hour.id,
-                                'day':day.get_day_display(),
-                                'is_closed':'Closed',
+                                'day': day.get_day_display(),
+                                'is_closed': 'Closed',
                             }
                         else:
-                             response={
+                            response = {
                                 'status': 'success',
                                 'id': hour.id,
-                                'day':day.get_day_display(),
-                                'from_hour':hour.from_hour,
-                                'to_hour':hour.to_hour,
+                                'day': day.get_day_display(),
+                                'from_hour': hour.from_hour,
+                                'to_hour': hour.to_hour,
                             }
-                    
                     return JsonResponse(response)
-                except IntegrityError  as e:
-                    response = {'status':'Failed','message':from_hour+'-'+to_hour+' is already exits!'}
+                except IntegrityError as e:
+                    response = {'status': 'Failed', 'message': from_hour+'-'+to_hour+' is already exits for this day!'}
                     return JsonResponse(response)
-            else:
-                return HttpResponse('Invalid Request!')
-    
+                
+        else:
+            HttpResponse('Invalid Request ')
+            
+       

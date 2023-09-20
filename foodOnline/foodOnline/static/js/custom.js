@@ -210,59 +210,56 @@ $('.delete_cart').on('click',function(e){
 
     // document ready close 
 
-    $('.add_hours').on('click',function(e){
-        e.preventDefault();
-        var day = document.getElementById('id_day').value
-        var from_hour = document.getElementById('id_from_hour').value
-        var to_hour = document.getElementById('id_to_hour').value
-        var is_closed = document.getElementById('id_is_closed').ariaChecked
-        url = document.getElementById('add_hour_url').value
-        var csrf_token = $("input[name=csrfmiddlewaretoken]").val();
+    $('.add_hours').on('click', function (e) {
+    e.preventDefault();
+    var day = document.getElementById('id_day').value;
+    var from_hour = document.getElementById('id_from_hour').value;
+    var to_hour = document.getElementById('id_to_hour').value;
+    var is_closed = document.getElementById('id_is_closed').checked;
+    var csrf_token = $("input[name=csrfmiddlewaretoken]").val();
+    var url = document.getElementById('add_hour_url').value;
 
-        if(is_closed){
-            is_closed = "True";
-            condition = "day!=''"
+    console.log(day, from_hour, to_hour, is_closed, csrf_token)
+
+    if(is_closed){
+            is_closed = 'True'
+            condition = "day != ''"
         }
-        else{
-            is_closed = "False";
-            condition = "day!='' && from_hour!='' && to_hour!=''"
+    else{
+            is_closed = 'False'
+            condition = "day != '' && from_hour != '' && to_hour != ''"
         }
 
-        if(eval(condition)){
-            $.ajax({
-                type:'POST',
-                url:url,
-                data:{
-                    'day':day,
-                    'from_hour':from_hour,
-                    'to_hour':to_hour,
-                    'is_closed':is_closed,
-                    'csrfmiddlewaretoken':csrf_token,
-                },
-                success: function(response){
-                    if(response.status == 'success'){
-                        if(response.is_closed == 'Closed'){
-                            html='<tr><td><b>'+response.day+'</b></td><td>Closed</td><td><a href="#">Remove</a></td></tr>'
+    if (eval(condition)) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'day': day,
+                'from_hour': from_hour,
+                'to_hour': to_hour,
+                'is_closed': is_closed,
+                'csrfmiddlewaretoken': csrf_token,
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    if(response.is_closed == 'Closed'){
+                            html = '<tr id="hour-'+response.id+'"><td><b>'+response.day+'</b></td><td>Closed</td><td><a href="#" class="remove_hour" data-url="/vendor/opening-hours/remove/'+response.id+'/">Remove</a></td></tr>';
                         }
-                        else{
-                        html='<tr><td><b>'+response.day+'</b></td><td>'+response.from_hour+' - '+response.to_hour+'</td><td><a href="#">Remove</a></td></tr>'
-                        }
-                        $('.opening_hours').append(html)
-                        swal(response.status,response.message,'success')
-                        document.getElementById('opening_hours').reset();
-
-                    }
                     else{
-                        swal(response.status,response.message,'error')
-                    }
+                            html = '<tr id="hour-'+response.id+'"><td><b>'+response.day+'</b></td><td>'+response.from_hour+' - '+response.to_hour+'</td><td><a href="#" class="remove_hour" data-url="/vendor/opening-hours/remove/'+response.id+'/">Remove</a></td></tr>';
+                        }
+                    $('.opening_hours').append(html);
+                    swal(response.status, response.message, 'success');
+                    document.getElementById('opening_hours').reset();
+                } else {
+                    swal(response.message,'', 'error');
                 }
-            })
-        }
-        else{
-            swal('Please fill all the fields','','info')
-        }
-
-        
-    })
+            }
+        });
+    } else {
+        swal('Please fill all the fields', '', 'info');
+    }
+});
 
 });

@@ -27,24 +27,13 @@
 									<hr>
                                     
 									
-                                    <table class="table opening_hours" style="width: 500px;border: None !important;">
+                                    <table class="table opening_hours" style="width: 800px; border: none !important;">
                                         <tbody>
-                                            {% for hour in Opening_hours %}
-                                                <tr>
-                                                    <td>
-                                                        <b>{{hour}}</b>
-                                                        
-                                                    </td>
-                                                    <td>
-                                                        {%if hour.is_closed %}
-                                                        Closed
-                                                        {%else %}
-                                                        {{hour.from_hours}}{{to_hour}}
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>
-                                                        <a href="#">Remove</a>
-                                                    </td>
+                                            {% for hour in opening_hours %}
+                                                <tr id="hour-{{hour.id}}">
+                                                    <td><b>{{ hour }}</b></td>
+                                                    <td>{% if hour.is_closed %}Closed{% else %}{{ hour.from_hour }} - {{ hour.to_hour }}{% endif %}</td>
+                                                    <td><a href="#" class="remove_hour" data-url="">Remove</a></td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
@@ -66,15 +55,15 @@
                                             <div class="col-md-3">
                                                 {{form.is_closed}} Set as Closed
                                             </div>
-                                    
                                             <div class="col-md-2">
-                                                <input type="hidden" value="{% url 'add_openinghours' %}" id="add_hour_url">
+                                                <input type="hidden" value="{% url 'add_opening_hours' %}" id="add_hour_url">
                                                 <button class="btn btn-success add_hours">
                                                     Add hours
                                                 </button>
                                             </div>
                                         </div>
                                     </form>
+
 								</div>
 							</div>
 						</div>
