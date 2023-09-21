@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cart
+from .models import Cart,Tax
 # Register your models here.
 
 class CartAdmin(admin.ModelAdmin):
@@ -11,5 +11,9 @@ class CartAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at','modified_at')
     
 
+class TaxAdmin(admin.ModelAdmin):
+    list_display=('tax_type','tax_percentage','is_active')
+
 
 admin.site.register(Cart,CartAdmin)
+admin.site.register(Tax,TaxAdmin)
