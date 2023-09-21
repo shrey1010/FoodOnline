@@ -33,7 +33,7 @@
                                                 <tr id="hour-{{hour.id}}">
                                                     <td><b>{{ hour }}</b></td>
                                                     <td>{% if hour.is_closed %}Closed{% else %}{{ hour.from_hour }} - {{ hour.to_hour }}{% endif %}</td>
-                                                    <td><a href="#" class="remove_hour" data-url="">Remove</a></td>
+                                                    <td><a href="#" class="remove_hour" data-url="{% url 'remove_opening_hours' hour.id %}">Remove</a></td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>

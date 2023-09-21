@@ -243,5 +243,23 @@ def add_opening_hours(request):
                 
         else:
             HttpResponse('Invalid Request ')
+
+
+def remove_opening_hours(request,pk=None):
+    if request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            hour = get_object_or_404(OpeningHour,pk=pk)
+            if hour:
+                hour.delete()
+                response = {'status': 'success','id':pk, 'message': 'Opening Hour has been deleted successfully!'} 
+                return JsonResponse(response)
+            response = {'status':'failed', 'message': 'Time Duration is not Found'}
+            return JsonResponse(response)
+
+        response = {'status':'failed', 'message': 'Invalid Request!'}
+        return JsonResponse(response)
+
+    response = {'status':'failed', 'message': 'User is not authenticated'}
+    return JsonResponse(response)
             
        

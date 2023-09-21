@@ -14,6 +14,8 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 from accounts.models import UserProfile
 from django.contrib.gis.geos import Point
+from vendor.models import OpeningHour
+from datetime import date,datetime
 
 # Create your views here.
 
@@ -35,6 +37,14 @@ def vendor_detail(request,vendor_slug):
             queryset= FoodItem.objects.filter(is_available=True)
         )
     )
+    opening_hours = OpeningHour.objects.filter(vendor=vendor).order_by('day','from_hour')
+
+    # check curreent day 
+    today_date = date.today()
+    today = today_date.isoweekday()
+    current_opening_hours = OpeningHour.objects.filter(vendor=vendor,day=today)
+
+
     # vendor = Vendor.objects.get(vendor_slug=vendor_slug)
     if request.user.is_authenticated:
             cart_items = Cart.objects.filter(user=request.user)
@@ -45,6 +55,9 @@ def vendor_detail(request,vendor_slug):
         'vendor': vendor,
         'categories': categories,
         'cart_items': cart_items,
+        'opening_hours':opening_hours,
+        'current_opening_hours':current_opening_hours,
+        
        
     }
     return render(request, 'marketplace/vendor_detail.html',context=context)

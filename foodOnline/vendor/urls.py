@@ -1,5 +1,5 @@
 from django.urls import path,include 
-from .views import vprofile,menuBuilder,fooditems_by_category,add_Category,edit_Category,delete_Category,add_Food,edit_Food,delete_Food,opening_hours,add_opening_hours
+from .views import vprofile,menuBuilder,fooditems_by_category,add_Category,edit_Category,delete_Category,add_Food,edit_Food,delete_Food,opening_hours,add_opening_hours,remove_opening_hours
 from accounts.views import vendorDashboard
 
 urlpatterns = [
@@ -21,4 +21,5 @@ urlpatterns = [
     #openinghour 
     path('opening-hours/',opening_hours,name='openinghours'),
     path('opening-hours/add/',add_opening_hours,name='add_opening_hours'),
+    path('opening-hours/remove/<int:pk>/',remove_opening_hours,name='remove_opening_hours'),
 ]
