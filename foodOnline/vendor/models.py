@@ -49,6 +49,7 @@ class Vendor(models.Model):
                 context = {
                         'user': self.user,
                         'approved': self.is_approved,
+                        'to_email': self.user.email,
                     }
 
                 if self.is_approved:
