@@ -73,6 +73,7 @@ TEMPLATES = [
                 "accounts.context_processors.get_vendor",
                 "accounts.context_processors.get_user_profile",
                 "accounts.context_processors.get_google_api",
+                "accounts.context_processors.get_paypal_id",
                 "marketplace.context_processors.get_cart_counter",
                 "marketplace.context_processors.get_cart_ammount",
                 
@@ -188,3 +189,8 @@ GDAL_LIBRARY_PATH = os.path.join(DIR, 'Lib', 'site-packages', 'osgeo', 'gdal304.
 
 # Now, you can use GDAL_LIBRARY_PATH wherever you need it in your code.
 
+
+# paypal 
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'

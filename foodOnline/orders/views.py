@@ -2,9 +2,10 @@ from django.shortcuts import render,redirect
 from marketplace.models import Cart
 from marketplace.context_processors import get_cart_counter,get_cart_ammount
 from .forms import OrderForm
-from .models import Order
+from .models import Order,Payment
 import simplejson as json
 from .utils import genrate_order_number
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -41,9 +42,52 @@ def place_order(request):
             order.save() #order.id is genrated
             order.order_number = genrate_order_number(order.id)
             order.save()
+
+            context = {
+                'order': order,
+                'cart_items': cart_items,
+            }
             
-            return redirect('place_order')
+            return render(request, 'orders/place_order.html',context=context)
         else:
             print(form.errors)
         
     return render(request,'orders/place_order.html')
+
+
+def payments(request):
+    # check ajax request
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' and request.method == 'POST':
+    # store payment details  
+        order_number = request.POST.get('order_number')
+        transaction_id = request.POST.get('transaction_id')
+        payment_method = request.POST.get('payment_method')
+        status = request.POST.get('status')
+
+        order = Order.objects.get(user = request.user,order_number=order_number)
+        payment = Payment(
+            user = request.user,
+            transaction_id = transaction_id,
+            payment_method = payment_method,
+            amount = order.total,
+            status = status
+        )
+        payment.save()
+
+        # update order 
+        order.payment = payment
+        order.is_ordered = True
+        order.save()
+
+        # mpve cart item to ordered food 
+
+        # send order confirmation mail 
+
+        # send order recieve to vender 
+
+        # clear cart 
+
+        # return back to ajax 
+
+    return HttpResponse('payments')
