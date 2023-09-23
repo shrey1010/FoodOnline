@@ -192,5 +192,7 @@ GDAL_LIBRARY_PATH = os.path.join(DIR, 'Lib', 'site-packages', 'osgeo', 'gdal304.
 
 # paypal 
 PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+RAZORPAY_CLIENT_ID = config('RAZORPAY_CLIENT_ID')
+RAZORPAY_CLIENT_SECRET = config('RAZORPAY_CLIENT_SECRET')
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'

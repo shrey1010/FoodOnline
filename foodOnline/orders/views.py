@@ -9,6 +9,12 @@ from django.http import HttpResponse
 from accounts.utils import send_notification
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+import razorpay
+from foodOnline.settings import RAZORPAY_CLIENT_ID,RAZORPAY_CLIENT_SECRET
+
+
+
+client = razorpay.Client(auth=(RAZORPAY_CLIENT_ID, RAZORPAY_CLIENT_SECRET))
 
 # Create your views here.
 
@@ -47,9 +53,24 @@ def place_order(request):
             order.order_number = genrate_order_number(order.id)
             order.save()
 
+            DATA = {
+                "amount": float(grand_total)*100,
+                "currency": "INR",
+                "receipt": "receipt#"+order.order_number,
+                "notes": {
+                    "key1": "value3",
+                    "key2": "value2"
+                }
+            }
+            rzo_order = client.order.create(data=DATA)
+            rzp_order_id = rzo_order['id']
+
             context = {
                 'order': order,
                 'cart_items': cart_items,
+                'rzp_order_id': rzp_order_id,
+                'RZP_KEY_ID':RAZORPAY_CLIENT_ID,
+                'rzp_amount': float(grand_total)*100,
             }
             
             return render(request, 'orders/place_order.html',context=context)
@@ -162,5 +183,11 @@ def order_complete(request):
         return render(request,'orders/order_complete.html',context=context)
     except:
         return redirect('home')
+    
+
+
+
+
+
 
     
