@@ -266,23 +266,27 @@ def remove_opening_hours(request,pk=None):
 
 def order_detail(request,order_number):
     try:
-        subtotal = 0
         order = Order.objects.get(order_number=order_number,is_ordered=True)
         vendor = Vendor.objects.get(user=request.user)
         ordered_food = OrderedFood.objects.filter(order=order,fooditem__vendor=vendor)
-        for item in ordered_food:
-            subtotal += (item.price * item.quantity)
-
-        tax_dict = json.loads(order.tax_data)
         context = {
         'order':order,
         'orderd_food':ordered_food,
-        'subtotal':subtotal,
-        'tax_dict':tax_dict,
-        
+        'subtotal':order.get_total_by_vendor()['subtotal'],
+        'tax_dict':order.get_total_by_vendor()['tax_dict'],
+        'grand_total':order.get_total_by_vendor()['grand_total'],
         }
         return render(request,'vendor/order_detail.html',context=context)
 
     except Exception as e:
         print(e)
         return redirect('vendorDashboard')
+    
+
+def my_order(request):
+    vendor = Vendor.objects.get(user = request.user)
+    orders= Order.objects.filter(vendors__in=[vendor.id],is_ordered = True).order_by('-created_at')
+    context={
+        'orders': orders
+    }
+    return render(request,'vendor/my_order.html',context=context)
