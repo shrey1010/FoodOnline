@@ -10,7 +10,9 @@ from accounts.utils import send_notification
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import razorpay
+from menu.models import FoodItem
 from foodOnline.settings import RAZORPAY_CLIENT_ID,RAZORPAY_CLIENT_SECRET
+from marketplace.models import Tax
 
 
 
@@ -25,6 +27,37 @@ def place_order(request):
     cart_count = cart_items.count()
     if cart_count<=0:
         return redirect("marketplace")
+    
+    subtotal = 0
+    k={}
+    venodors_ids = []
+    total_data={}
+    get_tax = Tax.objects.filter(is_active=True)
+    for i in cart_items:
+        if i.fooditem.vendor_id not in venodors_ids:
+            venodors_ids.append(i.fooditem.vendor_id)
+
+    for i in cart_items:
+        fooditem = FoodItem.objects.get(pk=i.fooditem.id,vendor_id__in=venodors_ids)
+        v_id = fooditem.vendor.id
+        if v_id in k:
+            subtotal = k[v_id]
+            subtotal += (fooditem.price*i.quantity)
+            k[v_id] = subtotal
+        else:
+            subtotal = (fooditem.price*i.quantity)
+            k[v_id] = subtotal
+
+        # calculate tax DATA
+        tax_dict = {}
+        for tax in get_tax:
+            tax_type = tax.tax_type
+            tax_percentage = tax.tax_percentage
+            tax_amount = round((subtotal * tax_percentage) / 100,2)
+            tax_dict.update({tax_type:{str(tax_percentage) :str(tax_amount)}})
+
+        total_data.update({fooditem.vendor.id:{str(subtotal):str(tax_dict)}})
+
     
     subtotal = get_cart_ammount(request)['subtotal']
     total_tax = get_cart_ammount(request)['tax']
@@ -47,10 +80,12 @@ def place_order(request):
             order.user = request.user
             order.total = grand_total
             order.tax_data = json.dumps(tax_data)
+            order.total_data = json.dumps(total_data)
             order.total_tax = total_tax
             order.payment_method = request.POST['payment-method']
             order.save() #order.id is genrated
             order.order_number = genrate_order_number(order.id)
+            order.vendors.add(*venodors_ids)
             order.save()
 
             DATA = {

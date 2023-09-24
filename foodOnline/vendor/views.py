@@ -1,4 +1,6 @@
 from django.shortcuts import render
+import simplejson as json
+from orders.models import Order,OrderedFood
 from .forms import VendorForm,OpeningHourForm
 from accounts.forms import UserProfileForm
 from django.shortcuts import get_object_or_404
@@ -261,5 +263,26 @@ def remove_opening_hours(request,pk=None):
 
     response = {'status':'failed', 'message': 'User is not authenticated'}
     return JsonResponse(response)
-            
-       
+
+def order_detail(request,order_number):
+    try:
+        subtotal = 0
+        order = Order.objects.get(order_number=order_number,is_ordered=True)
+        vendor = Vendor.objects.get(user=request.user)
+        ordered_food = OrderedFood.objects.filter(order=order,fooditem__vendor=vendor)
+        for item in ordered_food:
+            subtotal += (item.price * item.quantity)
+
+        tax_dict = json.loads(order.tax_data)
+        context = {
+        'order':order,
+        'orderd_food':ordered_food,
+        'subtotal':subtotal,
+        'tax_dict':tax_dict,
+        
+        }
+        return render(request,'vendor/order_detail.html',context=context)
+
+    except Exception as e:
+        print(e)
+        return redirect('vendorDashboard')
