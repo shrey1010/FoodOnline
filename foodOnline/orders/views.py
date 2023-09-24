@@ -4,7 +4,7 @@ from marketplace.context_processors import get_cart_counter,get_cart_ammount
 from .forms import OrderForm
 from .models import Order,Payment,OrderedFood
 import simplejson as json
-from .utils import genrate_order_number
+from .utils import genrate_order_number,order_total_by_vendor
 from django.http import HttpResponse
 from accounts.utils import send_notification
 from django.contrib.auth.decorators import login_required
@@ -13,6 +13,7 @@ import razorpay
 from menu.models import FoodItem
 from foodOnline.settings import RAZORPAY_CLIENT_ID,RAZORPAY_CLIENT_SECRET
 from marketplace.models import Tax
+from django.contrib.sites.shortcuts import get_current_site
 
 
 
@@ -158,10 +159,22 @@ def payments(request):
         # send order confirmation mail 
         mail_subject = 'Order Confirmation'
         mail_template = 'orders/mail_templates/order_confirmation.html'
+
+        ordered_food = OrderedFood.objects.filter(order=order)
+        customer_subtotal = 0
+        for item in ordered_food:
+            customer_subtotal += (item.price * item.quantity)
+
+        tax_data = json.loads(order.tax_data)
+
         context = {
             'user':request.user,
             'order':order,
             'to_email':order.email,
+            'ordered_food':ordered_food,
+            'domain':get_current_site(request).domain,
+            'customer_subtotal':customer_subtotal,
+            'tax_data':tax_data 
         }
         send_notification(mail_subject=mail_subject,mail_template=mail_template,context=context)
         
@@ -173,11 +186,17 @@ def payments(request):
         for item in cart_items:
             if item.fooditem.vendor.user.email not in to_email:
                 to_email.append(item.fooditem.vendor.user.email)
-        context = {
-            'order':order,
-            'to_email': to_email,
-        }
-        send_notification(mail_subject=mail_subject,mail_template=mail_template,context=context)
+                ordered_food_to_vendor = OrderedFood.objects.filter(order=order , fooditem__vendor=item.fooditem.vendor)
+
+                context = {
+                    'order':order,
+                    'to_email': item.fooditem.vendor.user.email,
+                    'ordered_food_to_vendor':ordered_food_to_vendor,
+                    'vendor_subtotal':order_total_by_vendor(order,item.fooditem.vendor.vendor.id)['subtotal'],
+                    'tax_data': order_total_by_vendor(order,item.fooditem.vendor.vendor.id)['tax_dict'],
+                    'vendor_grand_total':order_total_by_vendor(order,item.fooditem.vendor.vendor.id)['grand_total']
+                }
+                send_notification(mail_subject=mail_subject,mail_template=mail_template,context=context)
 
         
         # clear cart 
