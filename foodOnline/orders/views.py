@@ -192,9 +192,9 @@ def payments(request):
                     'order':order,
                     'to_email': item.fooditem.vendor.user.email,
                     'ordered_food_to_vendor':ordered_food_to_vendor,
-                    'vendor_subtotal':order_total_by_vendor(order,item.fooditem.vendor.vendor.id)['subtotal'],
-                    'tax_data': order_total_by_vendor(order,item.fooditem.vendor.vendor.id)['tax_dict'],
-                    'vendor_grand_total':order_total_by_vendor(order,item.fooditem.vendor.vendor.id)['grand_total']
+                    'vendor_subtotal':order_total_by_vendor(order,item.fooditem.vendor.id)['subtotal'],
+                    'tax_data': order_total_by_vendor(order,item.fooditem.vendor.id)['tax_dict'],
+                    'vendor_grand_total':order_total_by_vendor(order,item.fooditem.vendor.id)['grand_total']
                 }
                 send_notification(mail_subject=mail_subject,mail_template=mail_template,context=context)
 
